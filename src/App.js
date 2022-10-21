@@ -8,11 +8,18 @@ import "./App.css";
 
 function App() {
   const [user, setUser] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getUser = async () => {
     const url = "https://randomuser.me/api/";
-    const { data } = await axios(url);
-    setUser(data.results[0]);
+    setLoading(true);
+    try {
+      const { data } = await axios(url);
+      setUser(data.results[0]);
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -63,8 +70,8 @@ function App() {
         </div>
       </div>
       <div className="text-center">
-        <Button onClick={handleUser} variant="primary mt-4">
-          Random User
+        <Button disabled={loading} onClick={handleUser} variant="primary mt-4">
+          {loading ? "Loading..." : "Random User"}
         </Button>
       </div>
     </div>
